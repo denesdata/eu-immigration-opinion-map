@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        div {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="chart" style="height: 100%; width: 100%;"></div>
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <script src="d3-fetch.v1.min.js"></script>
+    <script src="d3-dsv.v1.min.js"></script>
+    <script src="d3-selection.v1.min.js"></script>
+    <script type="text/javascript">
+
+        function percentageFormatter(d) {
+            return +d.replace('%', '')
+        }
+
+        function getKeyValues(data, index, key, valueArray) {
+            var dummy = [];
+            for (i = 0; i < data.length; i++) {
+                if (data[i][index] == key) {
+                    var keys = Object.keys(data[i]);
+                    for (j = 0; j < keys.length; j++) {
+                        if (valueArray.includes(keys[j])) {
+                            dummy.push({
+                                'name': keys[j],
+                                'value': data[i][keys[j]],
+                                'visualMap': false
+                            })
+                        }
+                    }
+                }
+            }
+            return dummy
+        }
+
+        function getCountryValues(data, index, key) {
+            var dummy = [];
+            for (i = 0; i < data.length; i++) {
+                dummy.push({
+                    'name': data[i][index],
+                    'value': data[i][key]
+                })
+            }
+            return dummy
+        }
+
+        function getMax(data, key) {
+            return Math.max.apply(Math, data.map(function (o) { return o[key]; }))
+        }
+
+        var categories = ['Securitization', 'Humanitarianism', 'Economy', 'Demographics', 'Identity & Customs'];
+        var selected_category = 'Securitization';
+        var selected_country = 'Germany';
+        var dimensions = ['Refugee percent', 'Conversation size'];
+        var selected_dimension = 'Refugee percent'
+        var labels = ['EU politics', 'Domestic politics', 'Local note', 'Description'];
+        var index = 'Country name';
+        var all_dimensions = categories.concat(dimensions);
+        var labels_all_dimensions = all_dimensions.concat(labels);
+        var index_all_dimensions = [index].concat(labels_all_dimensions);
+        var countries = [];
+        var color_eu_blue = '#003399';
+        var color_eu_gold = '#FFCC00';
+        var colors = [
+            //color_eu_gold,
+            '#ffffcc',
+            '#a1dab4',
+            '#41b6c4',
+            '#2c7fb8',
+            //'#253494',
+            color_eu_blue];
+        var categorical = [
+            '#66c2a5',
+            '#fc8d62',
+            '#8da0cb',
+            '#e78ac3',
+            '#a6d854'
+        ]
+        var categorical2 = [
+            '#66c2a5',
+            '#fc8d62',
+            '#8da0cb',
+            '#e78ac3',
+            '#a6d854'
+        ];
+
+        d3.json("eu.mini.high.geo.json").then(function (eu) {
+            d3.dsv(",", "data.csv", function (d) {
+                //remvoe % sign, change labels if needed
+                for (i = 0; i < all_dimensions.length; i++) {
+                    var dim = all_dimensions[i];
+                    d[dim] = percentageFormatter(d[dim])
+                }
+
+                //manual overwrites
+                //d['Conversation size'] = percentageFormatter(d['Conversation size'])
+
+                return d
+            }).then(function (data) {
+                data.sort((a, b) => b[index].localeCompare(a[index]))
+                var data_by_key = [];
+                for (i = 0; i < data.length; i++) {
+                    //create list of countries
+                    countries.push(data[i][index])
+                    data_by_key[data[i][index]] = data[i]
+                };
+                console.log(data_by_key)
+                //var dom = document.getElementById("container");
+                var chart = echarts.init(d3.select("#chart").node());
+                echarts.registerMap('EU', eu, {});
+                //var app = {};
+
+                option = {
+                    //legend: { right:'5%',top:'5%'},
+                    tooltip: {
+                        //trigger: 'axis',
+                        //showContent: false
+                    },
+                    color: categorical,
+                    dataset: {
+                        dimensions: index_all_dimensions,
+                        source: data
+                    },
+                    visualMap: {
+                        min: 0,
+                        max: getMax(data, selected_category),
+                        orient: 'horizontal',
+                        left: 'center',
+                        top: 'bottom',
+                        calculable: true,
+                        text: ['High Score', 'Low Score'],
+                        inRange: {
+                            color: colors
+                        }
+                    },
+
+                    yAxis: { type: 'category' },
+                    xAxis: { gridIndex: 0, show: false },
+                    grid: { right: '75%', left: '120px' },
+                    series: [
+                        {
+                            id: 'map',
+                            type: 'map',
+                            roam: false,
+                            map: 'EU',
+                            showLegendSymbol: false,
+                            layoutCenter: ['52%', '50%'],
+                            layoutSize: '75%',
+                            itemStyle: {
+                                emphasis: { label: { show: true } }
+                            },
+                            data: getCountryValues(data, index, selected_category)
+                        },
+                        {
+                            type: 'bar',
+                            id: 'bar',
+                            itemStyle: { color: colors[3] },
+                            emphasis: { itemStyle: { color: colors[2] } },
+                            encode: {
+                                y: index,
+                                x: selected_dimension,
+                                //tooltip: dimensions
+                            }
+                        },
+                        {
+                            type: 'pie',
+                            id: 'pie',
+                            center: ['85%', '30%'],
+                            // label: {
+                            //     formatter: '{b}: {@' + selected_category + '} ({d}%)'
+                            // },
+                            radius: ['12%', '25%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    position: 'inside',
+                                    formatter: '{@' + selected_category + '}',
+                                    fontSize: 14
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: []
+                        }
+                    ]
+                };
+
+                function update() {
+                    chart.setOption({
+                        series: [
+                            {
+                                id: 'bar',
+                                encode: {
+                                    x: selected_dimension
+                                }
+                            },
+                            {
+                                id: 'map',
+                                data: getCountryValues(data, index, selected_category)
+                            },
+                            {
+                                id: 'pie',
+                                data: getKeyValues(data, index, selected_country, categories)
+                            }
+                        ],
+                        visualMap: {
+                            max: getMax(data, selected_category)
+                        },
+                        title: [{
+                            text: selected_country,
+                            left: '84.5%',
+                            top: '28.5%',
+                            textAlign: 'center',
+                            textVerticalAlign: 'middle',
+                            textStyle: { fontSize: 16 }
+                        },
+                        {
+                            text: data_by_key[selected_country]['Local note'],
+                            left: '84.5%',
+                            top: '50%',
+                            textAlign: 'center',
+                            textVerticalAlign: 'middle',
+                            textStyle: { fontSize: 12 }
+                        }]
+                    });
+                }
+
+                chart.on('click', function (event) {
+                    if (event.componentSubType != 'pie') {
+                        selected_country = event['name']
+                        update()
+                    }
+                });
+
+                // chart.on('updateAxisPointer', function (event) {
+                //     var xAxisInfo = event.axesInfo[0];
+                //     if (xAxisInfo) {
+                //         var dimension = xAxisInfo.value;
+                //         selected_country = countries[dimension]
+                //         chart.setOption({
+                //             series: {
+                //                 id: 'pie',
+                //                 data: getKeyValues(data, index, selected_country, categories)
+                //             }
+                //         });
+                //     }
+                //     // chart.dispatchAction({
+                //     //     type: 'highlight',
+                //     //     name: 'Hungary'
+                //     // })
+                // });
+
+
+                var button_width = 120;
+                var button_height = 30;
+                d3.select("body")
+                    .selectAll(".category")
+                    .data(categories)
+                    .enter().append("input")
+                    .attr("type", "button")
+                    .attr("class", "category")
+                    .attr("value", function (d) { return d; })
+                    .style('position', 'fixed')
+                    .style('top', '5px')
+                    .style('background-color', function (d, i) {
+                        return categorical[i]
+                    })
+                    .style('color', 'white')
+                    .style('right', function (d, i) {
+                        return 5 + i * (button_width + 5) + 'px'
+                    })
+                    .style('width', button_width + 'px')
+                    .style('height', button_height + 'px')
+                    .on('click', function (d) {
+                        selected_category = d;
+                        update();
+                    })
+
+                d3.select("body")
+                    .selectAll(".dimension")
+                    .data(dimensions)
+                    .enter().append("input")
+                    .attr("type", "button")
+                    .attr("class", "dimension")
+                    .attr("value", function (d) { return d; })
+                    .style('position', 'fixed')
+                    .style('top', '5px')
+                    .style('background-color', function (d, i) {
+                        return colors[2]
+                    })
+                    .style('color', 'white')
+                    .style('left', function (d, i) {
+                        return 5 + i * (button_width + 5) + 'px'
+                    })
+                    .style('width', button_width + 'px')
+                    .style('height', button_height + 'px')
+                    .on('click', function (d) {
+                        selected_dimension = d;
+                        update();
+                    })
+
+
+                if (option && typeof option === "object") {
+                    chart.setOption(option, true);
+                }
+
+                update();
+
+            })
+        })
+    </script>
+</body>
+
+</html>
