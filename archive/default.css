@@ -41,6 +41,7 @@ body {
 	left: 240px;
 	font-size: 1.3em;
 	width: 720px;
+	min-width: 720px;
 	text-align: left;
 }
 
