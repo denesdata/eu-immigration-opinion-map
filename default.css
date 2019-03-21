@@ -9,16 +9,9 @@
 
 body, html {
 	font-size: 100%;
-	padding: 0;
-	margin: 0;
 	background-color: none; 
-}
-
-body {
 	font-family: 'Lato', Calibri, Arial, sans-serif;
-	background-color: none;
 	font-weight: 400;
-	overflow: hidden;
 }
 
 #chart {
