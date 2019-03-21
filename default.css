@@ -12,14 +12,13 @@ body, html {
 	padding: 0;
 	margin: 0;
 	background-color: none; 
-	overflow-y: auto;
+	overflow: hidden;
 }
 
 body {
 	font-family: 'Lato', Calibri, Arial, sans-serif;
 	background-color: none;
 	font-weight: 400;
-	overflow-y: auto;
 }
 
 #chart {
