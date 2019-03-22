@@ -298,8 +298,8 @@
 											t = t + '<tr><td><i class="fas fa-' +
 												dimension_icons[dims[i]['name']] +
 												'"></i></td><td>' + dims[i]['name'] +
-												'</td><td>' + dims[i]['value'] +
-												' %</td></tr>'
+												'</td><td>' + ((i == 0) ? '# ' : '')+ dims[i]['value'] +
+												' '+((i==0)?'':'%')+'</td></tr>'
 										}
 										t = t + '</table>'
 										return t
@@ -337,6 +337,7 @@
 
 							yAxis: {
 								type: 'category',
+								triggerEvent: true,
 								axisLabel: {
 									color: font_color,
 									fontSize: font_small,
@@ -451,13 +452,17 @@
 							var values=getKeyValuesSimple(sorted_values,'value');
 							
 							chart.setOption({
-								// dataset: {
-								// 	id: 'd1',
-								// 	source: transpose([values,names])
-								// },
-								xAxis: {
+								//  dataset: {
+								//  	source: transpose([values,names])
+								//  },
+								visualMap: {
+									max: getMax(data, selected_category),
+									dimension: 0,
+									seriesIndex: [0,1]
+								},
+								yAxis: {
 									data: names,
-									labels: names
+									//max: getMax(data, selected_category)
 								},
 								series: [{
 										id: 'bar',
@@ -473,9 +478,6 @@
 											categories)
 									}
 								],
-								visualMap: {
-									max: getMax(data, selected_category)
-								},
 								title: [{
 									text: (selected_country == default_country) ? '' :
 										selected_country,
@@ -518,6 +520,10 @@
 						}
 
 						chart.on('click', function (event) {
+							if (event.componentType == 'yAxis') {
+								update(event['value'], selected_category, selected_dimension, true)
+							} 
+							 else
 							if (event.componentSubType != 'pie') {
 								update(event['name'], selected_category, selected_dimension, true)
 							} else {
