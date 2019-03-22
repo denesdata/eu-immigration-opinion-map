@@ -20,8 +20,10 @@
 	<div id='title' class='text fade'></div>
 	<div id='subtitle' class='text fade'></div>
 	<div id='logo' class='text fade credit'>
-		<a href='https://www.bakamosocial.com/' id='logo2' target='_blank'><img src='Bakamo_logo.jpg' alt='Bakamo' title='Bakamo' /></a>
-		<a href='https://www.fes.de/' id='logo1' target='_blank'><img src='FES_logo.png' alt='Friedrich Ebert Stiftung' title='Friedrich Ebert Stiftung'/></a>
+		<a href='https://www.bakamosocial.com/' id='logo2' target='_blank'><img src='Bakamo_logo.png' alt='Bakamo'
+				title='Bakamo' /></a>
+		<a href='https://www.fes.de/' id='logo1' target='_blank'><img src='FES_logo.png' alt='Friedrich Ebert Stiftung'
+				title='Friedrich Ebert Stiftung' /></a>
 	</div>
 	<div id='nav' class='fade'></div>
 	<div id="chart" style="height: 730px; width: 1000px;"></div>
@@ -34,16 +36,14 @@
 		<i class="fas fa-download"></i>
 	</div>
 	<div id='footer' class='text fade credit'>
-		<a href='https://www.bakamosocial.com/' 
-			target='_blank'>bakamo</a>
-		&nbsp;|&nbsp;<a href='https://www.fes.de/' 
-			target='_blank'>Friedrich Ebert Stiftung</a>
-			&nbsp;|&nbsp;&copy;&nbsp;2019
+		<a href='https://www.bakamosocial.com/' target='_blank'>bakamo</a>
+		&nbsp;|&nbsp;<a href='https://www.fes.de/' target='_blank'>Friedrich Ebert Stiftung</a>
+		&nbsp;|&nbsp;&copy;&nbsp;2019
 	</div>
 	<div id='dc2' class='credit'>
-		<a href='https://data.csaladen.es/' 
-			target='_blank'>
-		<img src='DC2_logo.png' title='viz created by: Denes Csala Data Consulting' alt='viz by Denes Csala Data Consulting'/></a>
+		<a href='https://data.csaladen.es/' target='_blank'>
+			<img src='DC2_logo.png' title='viz created by: Denes Csala Data Consulting'
+				alt='viz by Denes Csala Data Consulting' /></a>
 	</div>
 
 	<script src="https://www.google.com/jsapi"></script>
@@ -199,12 +199,13 @@
 						}))
 					}
 
-					function narrative_formatter(s,category,country,refugees,largest,note){
-						return s.toString().replace('{category}',category).replace('{country}',country).replace('{refugees}',refugees).replace('{largest}',largest,).replace('{note}',note)
+					function narrative_formatter(s, category, country, refugees, largest, note) {
+						return s.toString().replace('{category}', category).replace('{country}', country).replace(
+							'{refugees}', refugees).replace('{largest}', largest, ).replace('{note}', note)
 					}
 
-					function sortObject(objs,key) {
- 	   					return objs.sort((a,b) => (a.last_nom > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0)); 
+					function sortObject(objs, key) {
+						return objs.sort((a, b) => (a.last_nom > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0));
 					}
 
 					var categories = params['category_name'];
@@ -298,8 +299,8 @@
 											t = t + '<tr><td><i class="fas fa-' +
 												dimension_icons[dims[i]['name']] +
 												'"></i></td><td>' + dims[i]['name'] +
-												'</td><td>' + ((i == 0) ? '# ' : '')+ dims[i]['value'] +
-												' '+((i==0)?'':'%')+'</td></tr>'
+												'</td><td>' + ((i == 0) ? '# ' : '') + dims[i]['value'] +
+												' ' + ((i == 0) ? '' : '%') + '</td></tr>'
 										}
 										t = t + '</table>'
 										return t
@@ -388,9 +389,10 @@
 									},
 									itemStyle: {
 										color: font_color,
+										barBorderColor: '#888',
 										emphasis: {
 											color: highlight_color,
-											barBorderColor: font_color
+											//barBorderColor: font_color
 										}
 									},
 									data: []
@@ -434,7 +436,7 @@
 							]
 						};
 
-						function update(new_country, new_category, new_dimension, is_country) {
+						function update(new_country, new_category, new_dimension, is_country, is_dimension) {
 							chart.dispatchAction({
 								type: 'downplay',
 								series: 'bar',
@@ -444,28 +446,35 @@
 								selected_country = default_country
 							else selected_country = new_country;
 							selected_category = new_category;
-							selected_dimension = new_dimension;
-							
-							var country_values=getCountryValues(data, index, selected_category);
-							var sorted_values=sortObject(country_values,'value');
-							var names=getKeyValuesSimple(sorted_values,'name');
-							var values=getKeyValuesSimple(sorted_values,'value');
-							
+
+							var inversedY = false;
+							if ((new_dimension != selected_dimension) && (is_dimension)) {
+								selected_dimension = new_dimension
+								if (new_dimension=='Conversation') inversedY = true
+							} else selected_dimension = selected_category;
+
+							var country_values = getCountryValues(data, index, selected_dimension);
+
+							var sorted_values = sortObject(country_values, 'value');
+							var names = getKeyValuesSimple(sorted_values, 'name');
+							var values = getKeyValuesSimple(sorted_values, 'value');
+
 							chart.setOption({
-								//  dataset: {
-								//  	source: transpose([values,names])
-								//  },
 								visualMap: {
 									max: getMax(data, selected_category),
 									dimension: 0,
-									seriesIndex: [0,1]
+									seriesIndex: [0, is_dimension?0:1]
 								},
 								yAxis: {
 									data: names,
-									//max: getMax(data, selected_category)
+									inverse: inversedY
+								},
+								xAxis: {
+									max:inversedY?10000:'dataMax'
 								},
 								series: [{
 										id: 'bar',
+										//data: inversedY?names:values
 										data: values
 									},
 									{
@@ -511,23 +520,26 @@
 											keyValues[a][
 												'value'
 											] > keyValues[b]['value'] ? a : b)]
-										html = narrative_formatter(params['desc2'][0],selected_category,selected_country,data_by_key[selected_country]['Refugees'],maxKey,data_by_key[selected_country]['Local note'])
+										html = narrative_formatter(params['desc2'][0], selected_category,
+											selected_country, data_by_key[selected_country]['Refugees'],
+											maxKey,
+											data_by_key[selected_country]['Local note'])
 									}
 									return (selected_country == default_country) ? '' : html
 								})
 							d3.select('#desc1')
-								.html(narrative_formatter(params['desc1'][0],selected_category,selected_country,'','',''))
+								.html(narrative_formatter(params[selected_category][0], selected_category,
+									selected_country, '', '', ''))
 						}
 
 						chart.on('click', function (event) {
 							if (event.componentType == 'yAxis') {
-								update(event['value'], selected_category, selected_dimension, true)
-							} 
-							 else
+								update(event['value'], selected_category, selected_dimension, true, false)
+							} else
 							if (event.componentSubType != 'pie') {
-								update(event['name'], selected_category, selected_dimension, true)
+								update(event['name'], selected_category, selected_dimension, true, false)
 							} else {
-								update(selected_country, event['name'], selected_dimension, false)
+								update(selected_country, event['name'], selected_dimension, false, false)
 							}
 						});
 
@@ -545,7 +557,7 @@
 									'"></i><span>' + d + '</span>'
 							})
 							.on('click', function (d) {
-								update(selected_country, selected_category, d, false)
+								update(selected_country, selected_category, d, false, true)
 							})
 
 						category_select
@@ -574,7 +586,7 @@
 									'"/><span>' + d + '</span>'
 							})
 							.on('click', function (d) {
-								update(selected_country, d, selected_dimension, false)
+								update(selected_country, d, selected_dimension, false, false)
 							})
 
 						d3.selectAll('#subtitle')
@@ -610,7 +622,7 @@
 
 						d3.select('#footer')
 							.style('color', footer_color)
-						
+
 						d3.select('#footer').selectAll('a')
 							.style('color', footer_color)
 							.style('text-decoration', 'none')
@@ -620,7 +632,7 @@
 							chart.setOption(option, true);
 						}
 
-						update(selected_country, selected_category, selected_dimension, false);
+						update(selected_country, selected_category, selected_dimension, false, false);
 					})
 				}
 			}
