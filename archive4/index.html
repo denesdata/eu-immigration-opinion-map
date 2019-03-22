@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="//www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    <meta name="description"
+        content="Energy Trilemma Colorwheel: Sustainability | Security | Affordability #energytrilemma #energy #sustainability #dataviz @csaladenes" />
+    <meta name="keywords"
+        content="energy, renewable energy, energy trilemma, world energy council, wec, wecc, exploratorium, sustainability, affordability, security, colorwheel, dataviz, data visualization, lancaster university, masdar institute, rgb, rgb color wheel, contextual performance index, rgb hdi, colorful development, colorful, csaladenes, d3.js, d3" />
+    <meta property="og:image" content="//blog.csaladen.es/energy3/snapshot.png" />
+    <meta property="og:description"
+        content="Energy Trilemma Colorwheel: Sustainability | Security | Affordability #energytrilemma #energy #sustainability #dataviz @csaladenes" />
+    <meta property="og:title" content="Energy Trilemma Colorwheel: Sustainability | Security | Affordability" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="blog.csaladen.es" />
+    <meta property="fb:admins" content="100943737036023614165" />
+    <title>Energy Trilemma Colorwheel: Sustainability | Security | Affordability</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <style>
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+            -webkit-transition: opacity 0.5s;
+        }
+
+        iframe {
+            border: none;
+            overflow: hidden;
+            background: none;
+            width: 1000px;
+            height: 700px;
+        }
+
+        div,
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            border: none;
+            overflow: hidden;
+        }
+
+        body {
+            display: table;
+            height: 100%;
+            width: 100%;
+        }
+
+        #bg {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* background-color: black;  */
+            background-image: url(bg2.jpg);
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: -2;
+        }
+
+        #fr {
+            z-index: 2;
+        }
+
+        #cg {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            z-index: -1;
+        }
+    </style>
+
+<body>
+    <div id='bg'></div>
+    <div id='cg'></div>
+    <div id='fr'>
+        <iframe id="container" src='frame.html'>
+        </iframe>
+    </div>
+    <script>
+
+        setTimeout(function () {
+            var cg = document.getElementById('cg');
+            cg.style.opacity = 0;
+            var bg = document.getElementById('bg');
+            bg.style.opacity = .15;
+            cg.display = none;
+        }, 2000)
+
+        var rescale = function () {
+
+            //scale content
+            var scal = Math.min(
+                (document.getElementById("container").parentElement.offsetWidth) /
+                document.getElementById("container").offsetWidth,
+                (document.getElementById("container").parentElement.offsetHeight) /
+                document.getElementById("container").offsetHeight)
+            document.getElementById("container").style.WebkitTransform = "scale(" + scal + ")";
+            document.getElementById("container").style.OTransform = "scale(" + scal + ")";
+            document.getElementById("container").style.MozTransform = "scale(" + scal + ")";
+            document.getElementById("container").style.msTransform = "scale(" + scal + ")";
+            document.getElementById("container").style.Transform = "scale(" + scal + ")";
+
+            document.getElementById("container").style.WebkitTransformOrigin = "0 0";
+            document.getElementById("container").style.OTransformOrigin = "0 0";
+            document.getElementById("container").style.MozTransformOrigin = "0 0";
+            document.getElementById("container").style.msTransformOrigin = "0 0";
+            document.getElementById("container").style.TransformOrigin = "0 0";
+
+        };
+
+        window.onresize = function () {
+            //rescale();
+        }
+
+        //init view
+        //rescale();
+
+    </script>
+</body>
