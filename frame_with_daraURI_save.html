@@ -641,19 +641,7 @@
 						}, 400);
 
 						function save_img(){
-							url=chart.getDataURL()
-							console.log(url)
-							fetch(url)
-							.then(res => res.blob())
-							.then(blob => {
-							var fd = new FormData()
-							fd.append('image', blob, 'filename')
-							
-							console.log(blob)
-
-							// Upload
-							// fetch('upload', {method: 'POST', body: fd})
-							})
+							console.log(chart.getDataURL())
 						}
 
 						setTimeout(() => {
