@@ -1,13 +1,32 @@
 <!DOCTYPE html>
-<html xmlns="//www.w3.org/1999/xhtml">
+<html lang="en" xmlns="//www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    <meta name="description"
+        content="Migration narratives in Europe: Through conversations on public social media @BakamoSocial @FES_EU" />
+    <meta name="keywords"
+        content="migration immigration europe european union bakamo social friedrich erbert stiftung refugees social media narrative EU dataviz echarts csaladenes dc2 d3js d3" />
+    <meta property="og:image"
+        content="https://denesdata.github.io/eu-immigration-opinion-map/EU_migration_narratives_Security_Sweden.png" />
+    <meta property="og:description"
+        content="Migration narratives in Europe: Through conversations on public social media @BakamoSocial @FES_EU" />
+    <meta property="og:title" content="Migration narratives in Europe" />
     <meta property="og:type" content="article" />
-    <meta property="fb:admins" content="100943737036023614165" />
+    <meta property="og:site_name" content="https://www.bakamosocial.com" />
+    <meta property="og:url" content="https://www.bakamosocial.com" />
+    <meta property="fb:admins" content="bakamo.social" />
     <title>Migration narratives in Europe</title>
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="shortcut icon" href="https://www.bakamosocial.com/favicon.ico" />
+    
+	<!-- |---------------------------------------------------------------------------| -->
+	<!-- viz created by: Denes Csala Data Consulting | https://data.csaladen.es | 2019 -->
+	<!-- MIT LICENSE | https://denesdata.github.io/eu-immigration-opinion-map/LICENSE  -->
+	<!-- |---------------------------------------------------------------------------| -->
+
     <style>
         html,
         body {
@@ -86,7 +105,6 @@
             cg.style.opacity = 0;
             var bg = document.getElementById('bg');
             bg.style.opacity = .15;
-            //cg.display = 'none';
         }, 2000)
 
         var rescale = function (full) {
@@ -100,8 +118,7 @@
                 (parent.offsetHeight) /
                 container.offsetHeight)
 
-            console.log(scal)
-            scal=(scal>1)?(full?scal:1):scal;
+            scal = (scal > 1) ? (full ? scal : 1) : scal;
 
             console.log('rendering...scaling', scal)
 
@@ -119,12 +136,8 @@
 
         };
 
-        window.onresize = function () {
-            //rescale();
-        }
-
         //init view
-        if (window.location.hash=='#full') {
+        if (window.location.hash == '#full') {
             rescale(true);
         } else rescale(false);
 
