@@ -30,9 +30,9 @@ body {
 
 #chart {
 	position: fixed;
-	top: 170px;
+	top: 175px;
 	left: 0;
-	height: 550px;
+	height: 555px;
 	width: 1000px;
 	z-index: 10;
 }
@@ -121,7 +121,7 @@ a {
 
 #desc1 {
 	position: fixed;
-	top: 180px;
+	top: 190px;
 	left: 720px;
 	width: 260px;
 	/* height: 110px; */
@@ -131,7 +131,7 @@ a {
 
 #desc2 {
 	position: fixed;
-	top: 540px;
+	top: 550px;
 	left: 720px;
 	width: 260px;
 	/* height: 100px; */
