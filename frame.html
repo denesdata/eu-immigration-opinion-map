@@ -46,8 +46,9 @@
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
 	<div id='social' class='text fade credit'>
-		<a href='https://www.bakamosocial.com/' id='fb' target='_blank' class='text'><i
-				class="fab fa-facebook-f"></i></a>
+		<a href="#" id='fb' class='text' onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;">
+			<i class="fab fa-facebook-f"></i>
+		</a>
 		<a href='https://www.bakamosocial.com/' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
 		<a href='' id='dl' download class='text'><i class="fas fa-download"></i></a>
 	</div>
@@ -323,6 +324,15 @@
 							textStyle: {
 								fontFamily: 'Lato'
 							},
+							// dataZoom: [
+							// 	{
+							// 		id: 'dataZoomX',
+							// 		type: 'slider',
+							// 		yAxisIndex: [0],
+							// 		filterMode: 'empty',
+							// 		left:'10px'
+							// 	}
+							// ],
 							color: category_color,
 							visualMap: {
 								min: 0,
@@ -599,7 +609,7 @@
 								if (event.componentSubType != 'pie') {
 									highlight = event.name;
 								}
-								// else console.log('not known...', event)
+							// else console.log('not known...', event)
 							if (highlight != '') {
 								if (selected_country != highlight) {
 									chart.dispatchAction({
@@ -683,6 +693,9 @@
 							d3.selectAll('#dc2')
 								.style('opacity', 0.3)
 						}, 400);
+
+						// d3.select('#fb')
+						// 	.attr('href', 'https://www.facebook.com/share.php?u=<;'+params['url']+'>')
 
 						d3.select('#footer')
 							.style('color', footer_color)
