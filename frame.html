@@ -15,7 +15,7 @@
 <body>
 	<div id='title' class='text fade'></div>
 	<div id='subtitle' class='text fade'></div>
-	<div id='logo' class='text fade credit'>
+	<div id='logo' class='fade credit'>
 		<a href='https://www.bakamosocial.com/' id='logo2' target='_blank'><img src='Bakamo_logo.png' alt='Bakamo'
 				title='Bakamo' /></a>
 		<a href='https://www.fes.de/' id='logo1' target='_blank'><img src='FES_logo.png' alt='Friedrich Ebert Stiftung'
@@ -27,9 +27,9 @@
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
 	<div id='social' class='text fade credit'>
-		<i class="fab fa-facebook-f"></i>
-		<i class="fab fa-twitter"></i>
-		<i class="fas fa-download"></i>
+		<a href='https://www.bakamosocial.com/' id='fb' target='_blank' class='text'><i class="fab fa-facebook-f"></i></a>
+		<a href='https://www.bakamosocial.com/' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
+		<div id='dl' class='text'><i class="fas fa-download"></i></div>
 	</div>
 	<div id='footer' class='text fade credit'>
 		<a href='https://www.bakamosocial.com/' target='_blank'>bakamo</a>
@@ -221,6 +221,7 @@
 						'Conversation': 'comments'
 					};
 					var selected_dimension = 'Refugees'
+					var show_dimension=false;
 					var labels = ['EU politics', 'Domestic politics', 'Local note', 'Description'];
 					var index = 'Country name';
 					var all_dimensions = categories.concat(dimensions);
@@ -301,7 +302,7 @@
 										t = t + '</table>'
 										return t
 									} else {
-										return '<table><tr><td><img style="width:35px;height:35px;" src="' +
+										return '<table><tr><td><img style="width:25px;height:25px;" src="' +
 											d.name + '.png" alt="' + d.name +
 											'"></td><td>' + d.name +
 											'</td><td>' + d.value +
@@ -447,7 +448,17 @@
 							if ((new_dimension != selected_dimension) && (is_dimension)) {
 								selected_dimension = new_dimension
 								if (new_dimension=='Conversation') inversedY = true
-							} else selected_dimension = selected_category;
+							} else {
+								if (is_country) selected_dimension = new_dimension
+								else 
+								{
+									selected_dimension = selected_category;
+									show_dimension=false;
+								}
+							}
+
+							if (is_dimension) show_dimension=true;
+							
 
 							var country_values = getCountryValues(data, index, selected_dimension);
 
@@ -459,7 +470,7 @@
 								visualMap: {
 									max: getMax(data, selected_category),
 									dimension: 0,
-									seriesIndex: [0, is_dimension?0:1]
+									seriesIndex: [0, show_dimension?0:1]
 								},
 								yAxis: {
 									data: names,
@@ -529,6 +540,7 @@
 						}
 
 						chart.on('click', function (event) {
+							
 							if (event.componentType == 'yAxis') {
 								update(event['value'], selected_category, selected_dimension, true, false)
 							} else
@@ -597,9 +609,6 @@
 						d3.selectAll('.text')
 							.style('color', font_color)
 
-						d3.selectAll('.fade')
-							.style('opacity', 0)
-
 						setTimeout(() => {
 							d3.selectAll('.text')
 								.style('opacity', 1)
@@ -612,16 +621,23 @@
 
 						setTimeout(() => {
 							d3.selectAll('#dc2')
-								.style('opacity', 0.2)
+								.style('opacity', 0.3)
 						}, 400);
 
+						function save_img(){
+							console.log(chart.getDataURL())
+						}
+
+						setTimeout(() => {
+							d3.select('#dl')
+								.on('click', save_img)
+						}, 200);							
 
 						d3.select('#footer')
 							.style('color', footer_color)
 
 						d3.select('#footer').selectAll('a')
 							.style('color', footer_color)
-							.style('text-decoration', 'none')
 
 
 						if (option && typeof option === "object") {
