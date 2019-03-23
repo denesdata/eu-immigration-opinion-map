@@ -445,6 +445,8 @@
 							else selected_country = new_country;
 							selected_category = new_category;
 
+							if (is_dimension) show_dimension = true;
+
 							var inversedY = false;
 							if ((new_dimension != selected_dimension) && (is_dimension)) {
 								selected_dimension = new_dimension
@@ -459,9 +461,6 @@
 									show_dimension = false;
 								}
 							}
-
-							if (is_dimension) show_dimension = true;
-
 
 							var country_values = getCountryValues(data, index, selected_dimension);
 
