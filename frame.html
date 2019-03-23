@@ -573,6 +573,44 @@
 								}
 						});
 
+						chart.on('mouseover', function (event) {
+							var highlight = '';
+							if (event.componentType == 'yAxis') {
+								highlight = event.value;
+							} else
+								if (event.componentSubType != 'pie') {
+									highlight = event.name;
+								}
+							//else console.log('not known...',event)
+							if (highlight != '') {
+								chart.dispatchAction({
+									type: 'highlight',
+									// series: 'bar',
+									name: highlight
+								})
+							}
+						});
+
+						chart.on('mouseout', function (event) {
+							var highlight = '';
+							if (event.componentType == 'yAxis') {
+								highlight = event.value;
+							} else
+								if (event.componentSubType != 'pie') {
+									highlight = event.name;
+								}
+								// else console.log('not known...', event)
+							if (highlight != '') {
+								if (selected_country != highlight) {
+									chart.dispatchAction({
+										type: 'downplay',
+										// series: 'bar',
+										name: highlight
+									})
+								}
+							}
+						});
+
 						var category_select = d3.select("#nav")
 						category_select
 							.selectAll('.dim')
