@@ -89,7 +89,7 @@
             //cg.display = 'none';
         }, 2000)
 
-        var rescale = function () {
+        var rescale = function (full) {
 
             //scale content
             var container = document.getElementById("container")
@@ -99,6 +99,9 @@
                 container.offsetWidth,
                 (parent.offsetHeight) /
                 container.offsetHeight)
+
+            console.log(scal)
+            scal=(scal>1)?(full?scal:1):scal;
 
             console.log('rendering...scaling', scal)
 
@@ -121,7 +124,9 @@
         }
 
         //init view
-        rescale();
+        if (window.location.hash=='#full') {
+            rescale(true);
+        } else rescale(false);
 
     </script>
 </body>
