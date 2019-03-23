@@ -28,7 +28,7 @@
 	<div id='social' class='text fade credit'>
 		<a href='https://www.bakamosocial.com/' id='fb' target='_blank' class='text'><i class="fab fa-facebook-f"></i></a>
 		<a href='https://www.bakamosocial.com/' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
-		<div id='dl' class='text'><i class="fas fa-download"></i></div>
+		<a href='' id='dl' download class='text'><i class="fas fa-download"></i></a>
 	</div>
 	<div id='footer' class='text fade credit'>
 		<a href='https://www.bakamosocial.com/' target='_blank'>bakamo</a>
@@ -269,19 +269,19 @@
 							// 	top: '210px',
 							// 	orient: 'vertical'
 							// },
-							toolbox: {
-									feature: {
-										saveAsImage: {
-											name: 'mychart_' + Date.parse(new Date())/1000,
-											title: 'Save',
-											iconStyle: {
-												color: font_color
-											}
-										}
-									},
-									left: '10px',
-									top: '10px'
-							},
+							// toolbox: {
+							// 		feature: {
+							// 			saveAsImage: {
+							// 				name: 'mychart_' + Date.parse(new Date())/1000,
+							// 				title: 'Save',
+							// 				iconStyle: {
+							// 					color: font_color
+							// 				}
+							// 			}
+							// 		},
+							// 		left: '10px',
+							// 		top: '10px'
+							// },
 							tooltip: {
 								trigger: 'item',
 								showContent: true,
@@ -527,11 +527,13 @@
 									}
 								}]
 							});
+
 							chart.dispatchAction({
 								type: 'highlight',
 								series: 'bar',
 								name: selected_country
 							})
+
 							d3.select('#desc2')
 								.html(function (d) {
 									var keyValues = getKeyValues(data, index, selected_country,
@@ -550,9 +552,16 @@
 									}
 									return (selected_country == default_country) ? '' : html
 								})
+
 							d3.select('#desc1')
 								.html(narrative_formatter(params[selected_category][0], selected_category,
 									selected_country, '', '', ''))
+
+							setTimeout(()=>{
+							d3.select('#dl')
+								.attr('download','EU_migration_narratives_'+selected_category+((selected_country == default_country) ? '' : ('_'+selected_country))+'.png')
+								.attr('href',chart.getDataURL())
+							},1000)
 						}
 
 						chart.on('click', function (event) {
@@ -639,27 +648,6 @@
 							d3.selectAll('#dc2')
 								.style('opacity', 0.3)
 						}, 400);
-
-						function save_img(){
-							url=chart.getDataURL()
-							console.log(url)
-							fetch(url)
-							.then(res => res.blob())
-							.then(blob => {
-							var fd = new FormData()
-							fd.append('image', blob, 'filename')
-							
-							console.log(blob)
-
-							// Upload
-							// fetch('upload', {method: 'POST', body: fd})
-							})
-						}
-
-						setTimeout(() => {
-							d3.select('#dl')
-								.on('click', save_img)
-						}, 200);							
 
 						d3.select('#footer')
 							.style('color', footer_color)
