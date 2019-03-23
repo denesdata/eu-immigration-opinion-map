@@ -458,7 +458,10 @@
 								selected_dimension = new_dimension
 								if (new_dimension=='Conversation') inversedY = true
 							} else {
-								if (is_country) selected_dimension = new_dimension
+								if (is_country) {
+									selected_dimension = new_dimension
+									if (new_dimension=='Conversation') inversedY = true
+								}
 								else 
 								{
 									selected_dimension = selected_category;
