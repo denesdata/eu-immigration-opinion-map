@@ -22,8 +22,7 @@
 				title='Friedrich Ebert Stiftung' /></a>
 	</div>
 	<div id='nav' class='fade'></div>
-	<div id="chart" style="height: 730px; width: 1000px;"></div>
-	<div id='cat_label' class='text fade'></div>
+	<div id="chart"></div>
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
 	<div id='social' class='text fade credit'>
@@ -271,7 +270,11 @@
 							// 	orient: 'vertical'
 							// },
 							toolbox: {
-								show: false
+									feature: {
+										saveAsImage: {
+											name: 'mychart_' + Date.parse(new Date())/1000
+										}
+									}
 							},
 							tooltip: {
 								trigger: 'item',
@@ -349,7 +352,7 @@
 							grid: {
 								right: '750px',
 								left: '120px',
-								top: '190px',
+								top: '20px',
 								bottom: '28px'
 							},
 							series: [{
@@ -358,7 +361,7 @@
 									roam: false,
 									map: 'EU',
 									showLegendSymbol: false,
-									layoutCenter: ['480px', '400px'],
+									layoutCenter: ['480px', '230px'],
 									layoutSize: '440px',
 									itemStyle: {
 										emphasis: {
@@ -397,7 +400,7 @@
 								{
 									type: 'pie',
 									id: 'pie',
-									center: ['820px', '430px'],
+									center: ['820px', '260px'],
 									radius: ['35px', '60px'],
 									avoidLabelOverlap: true,
 									itemStyle: {
@@ -498,11 +501,22 @@
 									text: (selected_country == default_country) ? '' :
 										selected_country,
 									left: '815px',
-									top: '418px',
+									top: '248px',
 									textAlign: 'center',
 									textVerticalAlign: 'middle',
 									textStyle: {
 										fontSize: 16,
+										color: font_color
+									}
+								},
+								{
+									text: selected_category,
+									left: '430px',
+									top: '455px',
+									textAlign: 'center',
+									textVerticalAlign: 'middle',
+									textStyle: {
+										fontSize: 18,
 										color: font_color
 									}
 								}]
@@ -512,10 +526,6 @@
 								series: 'bar',
 								name: selected_country
 							})
-							d3.select('#cat_label')
-								.html(function (d) {
-									return selected_category
-								})
 							d3.select('#desc2')
 								.html(function (d) {
 									var keyValues = getKeyValues(data, index, selected_country,

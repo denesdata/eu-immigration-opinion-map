@@ -30,8 +30,10 @@ body {
 
 #chart {
 	position: fixed;
-	top: 0;
+	top: 170px;
 	left: 0;
+	height: 550px;
+	width: 1000px;
 	z-index: 10;
 }
 
@@ -93,16 +95,6 @@ a {
 	top: 15px;
 	left: 15px;
 	width: 100px;
-}
-#cat_label {
-	position: fixed;
-	top: 630px;
-	left: 335px;
-	width: 200px;
-	font-size: 1.2em;
-	font-weight: bold;
-	text-align: center;
-	vertical-align: middle;
 }
 
 #social {
