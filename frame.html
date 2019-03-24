@@ -697,16 +697,16 @@
 						}, 400);
 
 						function urlFormatter(url) {
-							return url.toString().replace(' ', '%20').replace('#', '%23').replace(':', '%3')
+							return url.toString().replace(' ', '%20').replace('#', '%23').replace(':', '%3A').replace('/','%2F%').replace('@','%40')
 						}
 
 						var social_url = params['url'][0];
-						var twitter = '%20@BakamoSocial%20@FES_EU%20%23EU%20%23Migration%20%23Refugees'
+						var tweet = params['tweet'][0;]
 						d3.select('#social_meta_url')
 							.attr('content', social_url)
 
 						d3.select('#tw')
-							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url) + twitter)
+							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url+tweet))
 
 						d3.select('#footer')
 							.style('color', footer_color)
