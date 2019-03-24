@@ -697,11 +697,16 @@
 						}, 400);
 
 						function urlFormatter(url) {
-							return url.toString().replace(' ', '%20').replace('#', '%23').replace(':', '%3A').replace('/','%2F%').replace('@','%40')
+							return url.toString()
+							.split(' ').join('%20')
+							.split('#').join('%23')
+							.split(':').join('%3A')
+							.split('/').join('%2F')
+							.split('@').join('%40')
 						}
 
 						var social_url = params['url'][0];
-						var tweet = params['tweet'][0;]
+						var tweet = params['tweet'][0];
 						d3.select('#social_meta_url')
 							.attr('content', social_url)
 
