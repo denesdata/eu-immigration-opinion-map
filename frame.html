@@ -17,7 +17,7 @@
 	<meta property="og:title" content="Migration narratives in Europe" />
 	<meta property="og:type" content="article" />
 	<meta property="og:site_name" content="https://www.bakamosocial.com" />
-	<meta property="og:url" content="https://www.bakamosocial.com" />
+	<meta id='social_meta_url' property="og:url" content="https://www.bakamosocial.com" />
 	<meta property="fb:admins" content="bakamo.social" />
 	<meta name="twitter:creator" content="@BakamoSocial">
 	<title>Migration narratives in Europe</title>
@@ -47,8 +47,8 @@
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
 	<div id='social' class='text fade credit'>
-		<a href="#" id='fb' class='text' 
-		onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;">
+		<a href="#" id='fb' class='text'
+			onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;">
 			<i class="fab fa-facebook-f"></i>
 		</a>
 		<a href='' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
@@ -696,19 +696,18 @@
 								.style('opacity', 0.3)
 						}, 400);
 
-						// d3.select('#fb')
-						// 	.attr('href', 'https://www.facebook.com/share.php?u=<;'+params['url']+'>')
-						//
-
-						function urlFormatter(url){
-							return url.toString().replace(' ','%20').replace('#','%23').replace(':','%3')
+						function urlFormatter(url) {
+							return url.toString().replace(' ', '%20').replace('#', '%23').replace(':', '%3')
 						}
 
-						var social_url=params['url'][0];
-						var twitter='%20@BakamoSocial%20@FES_EU%20%23EU%20%23Migration%20%23Refugees'
+						var social_url = params['url'][0];
+						var twitter = '%20@BakamoSocial%20@FES_EU%20%23EU%20%23Migration%20%23Refugees'
+						d3.select('#social_meta_url')
+							.attr('content', social_url)
+
 						d3.select('#tw')
-							.attr('href','https://twitter.com/home?status='+urlFormatter(social_url)+twitter)
-						
+							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url) + twitter)
+
 						d3.select('#footer')
 							.style('color', footer_color)
 
