@@ -707,8 +707,9 @@
 
 						var social_url = params['url'][0];
 						var tweet = params['tweet'][0];
-						d3.select('#social_meta_url')
-							.attr('content', social_url)
+						
+						// d3.select('#social_meta_url')
+						// 	.attr('content', social_url)
 
 						d3.select('#tw')
 							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url+tweet))
