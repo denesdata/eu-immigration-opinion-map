@@ -51,7 +51,7 @@
 		onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;">
 			<i class="fab fa-facebook-f"></i>
 		</a>
-		<a href='https://twitter.com/home?status=https%3A//denesdata.github.io/eu-immigration-opinion-map/%20@BakamoSocial%20@FES_EU%20%23EU%20%23Migration%20%23Refugees' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
+		<a href='' id='tw' target='_blank' class='text'><i class="fab fa-twitter"></i></a>
 		<a href='' id='dl' download class='text'><i class="fas fa-download"></i></a>
 	</div>
 	<div id='footer' class='text fade credit'>
@@ -698,7 +698,17 @@
 
 						// d3.select('#fb')
 						// 	.attr('href', 'https://www.facebook.com/share.php?u=<;'+params['url']+'>')
+						//
 
+						function urlFormatter(url){
+							return url.toString().replace(' ','%20').replace('#','%23').replace(':','%3')
+						}
+
+						var social_url=params['url'][0];
+						var twitter='%20@BakamoSocial%20@FES_EU%20%23EU%20%23Migration%20%23Refugees'
+						d3.select('#tw')
+							.attr('href','https://twitter.com/home?status='+urlFormatter(social_url)+twitter)
+						
 						d3.select('#footer')
 							.style('color', footer_color)
 

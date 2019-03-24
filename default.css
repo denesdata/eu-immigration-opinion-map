@@ -72,14 +72,12 @@ a {
 
 #logo{
 	z-index: 30;
-	opacity: 0;
 }
 
 #dc2 {
 	position: fixed;
 	top: 690px;
 	left: 965px;
-	opacity: 0;
 }
 
 #dc2 a img{
