@@ -67,10 +67,12 @@ a {
 
 .credit{
 	z-index: 20;
+	opacity: 0;
 }
 
 #logo{
 	z-index: 30;
+	opacity: 0;
 }
 
 #dc2 {
