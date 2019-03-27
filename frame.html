@@ -224,7 +224,7 @@
 					}
 
 					function sortObject(objs, key) {
-						return objs.sort((a, b) => (a.last_nom > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0));
+						return objs.sort((a, b) => (a.key > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0));
 					}
 
 					var categories = params['category_name'];
