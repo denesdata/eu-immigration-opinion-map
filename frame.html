@@ -2,6 +2,16 @@
 <html lang="en" xmlns="//www.w3.org/1999/xhtml">
 
 <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245728-2"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-137245728-2');
+	</script>
+
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -698,21 +708,21 @@
 
 						function urlFormatter(url) {
 							return url.toString()
-							.split(' ').join('%20')
-							.split('#').join('%23')
-							.split(':').join('%3A')
-							.split('/').join('%2F')
-							.split('@').join('%40')
+								.split(' ').join('%20')
+								.split('#').join('%23')
+								.split(':').join('%3A')
+								.split('/').join('%2F')
+								.split('@').join('%40')
 						}
 
 						var social_url = params['url'][0];
 						var tweet = params['tweet'][0];
-						
+
 						// d3.select('#social_meta_url')
 						// 	.attr('content', social_url)
 
 						d3.select('#tw')
-							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url+tweet))
+							.attr('href', 'https://twitter.com/home?status=' + urlFormatter(social_url + tweet))
 
 						d3.select('#footer')
 							.style('color', footer_color)

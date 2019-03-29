@@ -2,6 +2,16 @@
 <html lang="en" xmlns="//www.w3.org/1999/xhtml">
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245728-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-137245728-2');
+    </script>
+
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,7 +125,7 @@
                 height)
 
             scal = (scal > 1) ? (full ? scal : 1) : scal;
-            
+
             console.log('rendering...scaling', scal)
             container.width = width
             container.height = height
@@ -129,7 +139,7 @@
             container.style.MozTransformOrigin = "50% 50%";
             container.style.msTransformOrigin = "50% 50%";
             container.style.TransformOrigin = "50% 50%";
-            
+
             container.setAttribute('src', 'frame.html')
         };
 
@@ -137,6 +147,6 @@
         if (window.location.hash == '#full') {
             rescale(true);
         } else rescale(false);
-        
+
     </script>
 </body>
