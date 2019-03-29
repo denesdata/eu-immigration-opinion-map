@@ -21,11 +21,11 @@
     <meta property="fb:admins" content="bakamo.social" />
     <title>Migration narratives in Europe</title>
     <link rel="shortcut icon" href="https://www.bakamosocial.com/favicon.ico" />
-    
-	<!-- |---------------------------------------------------------------------------| -->
-	<!-- viz created by: Denes Csala Data Consulting | https://data.csaladen.es | 2019 -->
-	<!-- MIT LICENSE | https://denesdata.github.io/eu-immigration-opinion-map/LICENSE  -->
-	<!-- |---------------------------------------------------------------------------| -->
+
+    <!-- |---------------------------------------------------------------------------| -->
+    <!-- viz created by: Denes Csala Data Consulting | https://data.csaladen.es | 2019 -->
+    <!-- MIT LICENSE | https://denesdata.github.io/eu-immigration-opinion-map/LICENSE  -->
+    <!-- |---------------------------------------------------------------------------| -->
 
     <style>
         html,
@@ -55,8 +55,6 @@
             padding: 0;
             margin: 0;
             display: block;
-            width: 1000px;
-            height: 720px;
         }
 
 
@@ -70,8 +68,6 @@
             background-size: cover;
             opacity: 0;
             z-index: -2;
-            width: 100%;
-            height: 100%;
         }
 
         #fr {
@@ -86,8 +82,6 @@
             background-color: #eee;
             opacity: 1;
             z-index: -1;
-            width: 100%;
-            height: 100%;
         }
     </style>
 
@@ -99,13 +93,15 @@
         </iframe>
     </div>
     <script>
-
         setTimeout(function () {
             var cg = document.getElementById('cg');
             cg.style.opacity = 0;
             var bg = document.getElementById('bg');
             bg.style.opacity = .15;
         }, 2000)
+
+        var width = 1000;
+        var height = 720;
 
         var rescale = function (full) {
 
@@ -114,32 +110,33 @@
             var parent = document.body;
             var scal = Math.min(
                 (parent.offsetWidth) /
-                container.offsetWidth,
+                width,
                 (parent.offsetHeight) /
-                container.offsetHeight)
+                height)
 
             scal = (scal > 1) ? (full ? scal : 1) : scal;
-
+            
             console.log('rendering...scaling', scal)
-
+            container.width = width
+            container.height = height
             container.style.WebkitTransform = "scale(" + scal + ")";
             container.style.OTransform = "scale(" + scal + ")";
             container.style.MozTransform = "scale(" + scal + ")";
             container.style.msTransform = "scale(" + scal + ")";
             container.style.Transform = "scale(" + scal + ")";
-
             container.style.WebkitTransformOrigin = "50% 50%";
             container.style.OTransformOrigin = "50% 50%";
             container.style.MozTransformOrigin = "50% 50%";
             container.style.msTransformOrigin = "50% 50%";
             container.style.TransformOrigin = "50% 50%";
-
+            
+            container.setAttribute('src', 'frame.html')
         };
 
         //init view
         if (window.location.hash == '#full') {
             rescale(true);
         } else rescale(false);
-
+        
     </script>
 </body>
