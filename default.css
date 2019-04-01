@@ -127,6 +127,7 @@ a {
 	/* height: 110px; */
 	font-size: 0.9em;
 	text-align: left;
+	z-index:12;
 }
 
 #desc2 {
@@ -137,6 +138,7 @@ a {
 	/* height: 100px; */
 	font-size: 0.9em;
 	text-align: left;
+	z-index:12;
 }
 
 #nav {

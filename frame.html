@@ -229,8 +229,12 @@
 					}
 
 					function narrative_formatter(s, category, country, refugees, largest, note) {
-						return s.toString().replace('{category}', category).replace('{country}', country).replace(
-							'{refugees}', refugees).replace('{largest}', largest).replace('{note}', note)
+						return s.toString()
+							.split('{category}').join(category)
+							.split('{country}').join(country)
+							.split('{refugees}').join(refugees)
+							.split('{largest}').join(largest)
+							.split('{note}').join(note)
 					}
 
 					function sortObject(objs, key) {
@@ -268,10 +272,14 @@
 					var color_eu_gold = '#FFCC00';
 					var dark_color = '#222';
 					var light_color = '#eee';
-					var highlight_color = '#fc8d62';
+					var highlight_color = '#999' //'#fc8d62';
 					var colors = params['colors']
 					var categorical = params['categorical'];
 					var category_color = params['category_color'];
+					var category_color_key = {};
+					for (i = 0; i < categories.length; i++) {
+						category_color_key[categories[i]] = category_color[i];
+					}
 
 					console.log('loaded parameters:', params)
 
@@ -354,14 +362,15 @@
 								calculable: true,
 								itemWidth: 20,
 								itemHeight: 200,
+								borderWidth: 1,
 								text: ['← try filtering countries'], //↖
-								inRange: {
-									color: colors
-								},
 								textStyle: {
 									color: font_color,
 									fontSize: font_small
-								}
+								},
+								// inRange: {
+								// 	color: colors
+								// }
 							},
 
 							yAxis: {
@@ -499,7 +508,10 @@
 								visualMap: {
 									max: getMax(data, selected_category),
 									dimension: 0,
-									seriesIndex: [0, show_dimension ? 0 : 1]
+									seriesIndex: [0, show_dimension ? 0 : 1],
+									inRange: {
+										color: [light_color, category_color_key[selected_category]]
+									}
 								},
 								yAxis: {
 									data: names,
@@ -553,28 +565,39 @@
 								name: selected_country
 							})
 
+							// d3.select('#desc2')
+							// 	.html(function (d) {
+							// 		var keyValues = getKeyValues(data, index, selected_country,
+							// 			categories)
+							// 		var maxKey = ''
+							// 		var html = ''
+							// 		if (keyValues.length) {
+							// 			maxKey = categories[Object.keys(keyValues).reduce((a, b) =>
+							// 				keyValues[a][
+							// 					'value'
+							// 				] > keyValues[b]['value'] ? a : b)]
+							// 			html = narrative_formatter(params['desc2'][0], selected_category,
+							// 				selected_country, data_by_key[selected_country]['Refugees'],
+							// 				maxKey,
+							// 				data_by_key[selected_country]['Local note'])
+							// 		}
+							// 		return (selected_country == default_country) ? '' : html
+							// 	})
+
 							d3.select('#desc2')
 								.html(function (d) {
-									var keyValues = getKeyValues(data, index, selected_country,
-										categories)
-									var maxKey = ''
-									var html = ''
-									if (keyValues.length) {
-										maxKey = categories[Object.keys(keyValues).reduce((a, b) =>
-											keyValues[a][
-												'value'
-											] > keyValues[b]['value'] ? a : b)]
-										html = narrative_formatter(params['desc2'][0], selected_category,
-											selected_country, data_by_key[selected_country]['Refugees'],
-											maxKey,
-											data_by_key[selected_country]['Local note'])
-									}
-									return (selected_country == default_country) ? '' : html
+									return (selected_country == default_country) ? '' : narrative_formatter(params[selected_country][0], selected_category,
+										selected_country, '', '', '')
 								})
 
 							d3.select('#desc1')
 								.html(narrative_formatter(params[selected_category][0], selected_category,
 									selected_country, '', '', ''))
+
+							d3.select('#subtitle')
+								.html(narrative_formatter(params[selected_category][1], selected_category,
+									selected_country, '', '', ''))
+
 
 							setTimeout(() => {
 								d3.select('#dl')
