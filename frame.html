@@ -251,7 +251,7 @@
 						'Demographics': 'user-friends',
 						'Identity': 'passport'
 					};
-					var selected_category = categories[0];
+					var selected_category = 'Conversation';
 					var selected_country = 'Sweden';
 					var default_country = 'Select country';
 					var dimensions = ['Refugees', 'Conversation'];
@@ -283,6 +283,9 @@
 					for (i = 0; i < categories.length; i++) {
 						category_color_key[categories[i]] = category_color[i];
 					}
+					for (i = 0; i < dimensions.length; i++) {
+						category_color_key[dimensions[i]] = font_color;
+					}
 
 					console.log('loaded parameters:', params)
 
@@ -294,11 +297,14 @@
 							//create list of countries
 							data_by_key[rawdata[i][index]] = rawdata[i]
 							if (parseInt(rawdata[i]['Show'])) {
-								data.push(rawdata[i])
-								countries.push(rawdata[i][index])
+								d=rawdata[i]
+								d['Conversation']=29-d['Conversation'];
+								data.push(d)
+								countries.push(d[index])
 							}
 						};
-
+						
+						// console.log(data)
 						countries.sort((a, b) => a.localeCompare(b))
 
 						var chart = echarts.init(d3.select("#chart").node());
@@ -330,7 +336,7 @@
 											t = t + '<tr><td><i class="fas fa-' +
 												dimension_icons[dims[i]['name']] +
 												'"></i></td><td>' + dims[i]['name'] +
-												'</td><td>' + ((i == 0) ? '# ' : '') + dims[i]['value'] +
+												'</td><td>' + ((i == 0) ? ' ' : '') + dims[i]['value'] +
 												' ' + ((i == 0) ? '' : '%') + '</td></tr>'
 										}
 										t = t + '</table>'
@@ -442,7 +448,6 @@
 									position: 'right',
 									fontWeight: 'bold',
 									color: font_color,
-									formatter: '{c} %',
 									emphasis: {
 										color: highlight_color,
 										fontSize: font_small
@@ -512,30 +517,19 @@
 								series: 'bar',
 								name: selected_country
 							})
-							
+
 							if ((new_country == selected_country) && (is_country))
 								selected_country = default_country
 							else selected_country = new_country;
-							selected_category = new_category;
 
-							if (is_dimension) show_dimension = true;
-
-							var inversedY = false;
-							if ((new_dimension != selected_dimension) && (is_dimension)) {
-								selected_dimension = new_dimension
-								if (new_dimension == 'Conversation') inversedY = true
+							if (is_dimension) {
+								selected_category = new_dimension;
+								selected_dimension = new_dimension;
 							} else {
-								if (is_country) {
-									selected_dimension = new_dimension
-									if (new_dimension == 'Conversation') inversedY = true
-								}
-								else {
-									selected_dimension = selected_category;
-									show_dimension = false;
-								}
+								selected_category = new_category;
 							}
 
-							var country_values = getCountryValues(data, index, selected_dimension);
+							var country_values = getCountryValues(data, index, selected_category);
 
 							var sorted_values = sortObject(country_values, 'value');
 							var names = getKeyValuesSimple(sorted_values, 'name');
@@ -545,7 +539,7 @@
 								visualMap: {
 									max: getMax(data, selected_category),
 									dimension: 0,
-									seriesIndex: [0, show_dimension ? 0 : 1],
+									seriesIndex: [0, 1],
 									inRange: {
 										color: [light_color2, category_color_key[selected_category]]
 									},
@@ -555,15 +549,17 @@
 									}
 								},
 								yAxis: {
-									data: names,
-									inverse: inversedY
+									data: names
 								},
 								xAxis: {
-									max: inversedY ? 10000 : 'dataMax'
+									max: 'dataMax'
 								},
 								series: [{
 									id: 'bar',
-									data: values
+									data: values,
+									label: {
+										formatter: (selected_category == 'Conversation') ? '{c}' : '{c} %'
+									}
 								},
 								{
 									id: 'map',
