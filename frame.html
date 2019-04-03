@@ -53,6 +53,7 @@
 				src='FES_logo.png' alt='Friedrich Ebert Stiftung' title='Friedrich Ebert Stiftung' /></a>
 	</div>
 	<div id='nav' class='fade'></div>
+	<div id='nav2' class='fade'></div>
 	<div id="chart"></div>
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
@@ -255,6 +256,8 @@
 					var selected_country = 'Sweden';
 					var default_country = 'Select country';
 					var dimensions = ['Refugees', 'Conversation'];
+					var toggle_labels = ['Stacked', 'Ranking'];
+					var toggles = [false, true];
 					var dimension_icons = {
 						'Refugees': 'percentage',
 						'Conversation': 'comments'
@@ -269,6 +272,7 @@
 					var countries = [];
 					var font_color = params['font_color'][0]
 					var font_small = 13;
+					var spacer = 10;
 					var footer_color = '#999';
 					var color_eu_blue = '#003399';
 					var color_eu_gold = '#FFCC00';
@@ -297,13 +301,14 @@
 							//create list of countries
 							data_by_key[rawdata[i][index]] = rawdata[i]
 							if (parseInt(rawdata[i]['Show'])) {
-								d=rawdata[i]
-								d['Conversation']=29-d['Conversation'];
+								d = rawdata[i]
+								d['Conversation'] = 29 - d['Conversation'];
+								d['Spacer'] = spacer;
 								data.push(d)
 								countries.push(d[index])
 							}
 						};
-						
+
 						// console.log(data)
 						countries.sort((a, b) => a.localeCompare(b))
 
@@ -401,13 +406,16 @@
 								}
 							}
 							],
+							dataset: {
+								source: data
+							},
 							yAxis: {
 								type: 'category',
 								triggerEvent: true,
 								axisLabel: {
 									color: font_color,
 									fontSize: font_small
-								},
+								}
 							},
 							xAxis: {
 								gridIndex: 0,
@@ -415,8 +423,8 @@
 							},
 							grid: {
 								right: '750px',
-								left: '120px',
-								top: '20px',
+								left: '110px',
+								top: '40px',
 								bottom: '28px'
 							},
 							series: [{
@@ -436,29 +444,6 @@
 									emphasis: {
 										color: dark_color,
 										fontSize: font_small
-									}
-								},
-								data: []
-							},
-							{
-								type: 'bar',
-								id: 'bar',
-								label: {
-									show: true,
-									position: 'right',
-									fontWeight: 'bold',
-									color: font_color,
-									emphasis: {
-										color: highlight_color,
-										fontSize: font_small
-									}
-
-								},
-								itemStyle: {
-									color: font_color,
-									barBorderColor: '#888',
-									emphasis: {
-										color: highlight_color
 									}
 								},
 								data: []
@@ -511,6 +496,75 @@
 							}]
 						};
 
+
+						var bari = {
+							type: 'bar',
+							stack: 'a',
+							label: {
+								show: false
+							},
+							itemStyle: {
+								barBorderColor: '#888',
+								emphasis: {
+									shadowBlur:
+									{
+										shadowColor: 'rgba(0, 0, 0, 0.5)',
+										shadowBlur: 10
+									}
+								}
+							}
+						}
+
+						//stacked
+						for (b = 0; b < categories.length; b++) {
+							var barj = JSON.parse(JSON.stringify(bari));
+							barj.id = 'bar' + b
+							barj.itemStyle.color = category_color[b]
+							option.series.push(barj)
+						}
+
+						//spacer
+						var barj = {
+							type: 'bar',
+							id: 'barx',
+							stack: 'a',
+							label: {
+								show: false
+							},
+							itemStyle: {
+								color: '#eee',
+								emphasis: {
+									color: '#eee',
+									barBorderColor: highlight_color
+								}
+							}
+						}
+						option.series.push(barj)
+
+						option.series.push({
+							type: 'bar',
+							id: 'bar',
+							stack: 'a',
+							label: {
+								show: true,
+								position: 'right',
+								fontWeight: 'bold',
+								color: font_color,
+								emphasis: {
+									color: highlight_color,
+									fontSize: font_small
+								}
+							},
+							itemStyle: {
+								color: font_color,
+								barBorderColor: '#888',
+								emphasis: {
+									color: highlight_color
+								}
+							},
+							data: []
+						})
+
 						function update(new_country, new_category, new_dimension, is_country, is_dimension) {
 							chart.dispatchAction({
 								type: 'downplay',
@@ -535,11 +589,11 @@
 							var names = getKeyValuesSimple(sorted_values, 'name');
 							var values = getKeyValuesSimple(sorted_values, 'value');
 
-							chart.setOption({
+							var new_option = {
 								visualMap: {
 									max: getMax(data, selected_category),
 									dimension: 0,
-									seriesIndex: [0, 1],
+									seriesIndex: [0, 8],
 									inRange: {
 										color: [light_color2, category_color_key[selected_category]]
 									},
@@ -552,24 +606,26 @@
 									data: names
 								},
 								xAxis: {
-									max: 'dataMax'
+									max: toggles[0] ? (toggles[1] ? 220 : 110) : 'dataMax'
 								},
-								series: [{
-									id: 'bar',
-									data: values,
-									label: {
-										formatter: (selected_category == 'Conversation') ? '{c}' : '{c} %'
+								series: [
+									{
+										id: 'bar',
+										data: toggles[1] ? values : [],
+										label: {
+											formatter: (selected_category == 'Conversation') ? '{c}' : '{c} %'
+										}
+									},
+
+									{
+										id: 'map',
+										data: getCountryValues(data, index, selected_category)
+									},
+									{
+										id: 'pie',
+										data: getKeyValues(data, index, selected_country,
+											categories)
 									}
-								},
-								{
-									id: 'map',
-									data: getCountryValues(data, index, selected_category)
-								},
-								{
-									id: 'pie',
-									data: getKeyValues(data, index, selected_country,
-										categories)
-								}
 								],
 								title: [{
 									text: (selected_country == default_country) ? '' :
@@ -596,7 +652,24 @@
 										color: font_color
 									}
 								}]
-							});
+							}
+
+							for (b = 0; b < categories.length; b++) {
+								// console.log(categories[b], b)
+								d = {
+									id: 'bar' + b,
+									dimensions: toggles[0] ? ['Country name', categories[b]] : ['Country name'],
+								}
+								new_option.series.push(d)
+							}
+
+							d = {
+								id: 'barx',
+								dimensions: toggles[0] ? ['Country name', 'Spacer'] : ['Country name'],
+							}
+							new_option.series.push(d)
+
+							chart.setOption(new_option);
 
 							chart.dispatchAction({
 								type: 'highlight',
@@ -631,7 +704,7 @@
 
 							d3.select('#desc3')
 								.html(function (d) {
-									return (selected_country == default_country) ? '':'<a href="'+params[selected_country][1]+ '" target="_blank" style="color:' + font_color + ';">Read full report ►</a>'
+									return (selected_country == default_country) ? '' : '<a href="' + params[selected_country][1] + '" target="_blank" style="color:' + font_color + ';">Read full report ►</a>'
 								})
 
 							d3.select('#desc1')
@@ -641,6 +714,11 @@
 							// d3.select('#subtitle')
 							// 	.html(narrative_formatter(params[selected_category][1], selected_category,
 							// 		selected_country, '', '', ''))
+
+							d3.selectAll('.tgl')
+								.style('background', function (d, i) {
+									return toggles[i] ? font_color : footer_color
+								})
 
 							setTimeout(() => {
 								d3.select('#dl')
@@ -716,6 +794,20 @@
 								update(selected_country, selected_category, d, false, true)
 							})
 
+						d3.select("#nav2")
+							.selectAll('.tgl')
+							.data(toggle_labels)
+							.enter()
+							.append('div')
+							.attr('class', 'tgl button')
+							.html(function (d) {
+								return d
+							})
+							.on('click', function (d, i) {
+								toggles[i] = !(toggles[i]);
+								update(selected_country, selected_category, selected_dimension, false, false)
+							})
+
 						category_select
 							.selectAll('.sep')
 							.data([' '])
@@ -753,6 +845,9 @@
 							.html(params['title'][0])
 
 						d3.selectAll('.menu')
+							.style('color', '#fff')
+
+						d3.selectAll('.tgl')
 							.style('color', '#fff')
 
 						d3.selectAll('.text')

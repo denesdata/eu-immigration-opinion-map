@@ -168,6 +168,28 @@ a {
 	white-space: nowrap;
 }
 
+#nav2 {
+	position: fixed;
+	top: 175px;
+	left: 10px;
+	width: 230px;
+	z-index: 10;
+	font-size: 1em;
+	cursor: pointer;
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+	z-index: 11;
+	white-space: nowrap;
+}
+.tgl {
+	display: inline-block;
+	padding:5px;
+	height: 30px;
+	width: 115px;
+	text-align: center;
+}
+
 #subtitle {
 	position: fixed;
 	top: 50px;
