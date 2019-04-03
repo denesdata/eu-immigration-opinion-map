@@ -49,13 +49,14 @@
 	<div id='logo' class='fade credit'>
 		<a href='https://www.bakamosocial.com/' id='logo2' target='_blank'><img src='Bakamo_logo.png' alt='Bakamo'
 				title='Bakamo' /></a>
-		<a href='https://www.fes.de/' id='logo1' target='_blank'><img src='FES_logo.png' alt='Friedrich Ebert Stiftung'
-				title='Friedrich Ebert Stiftung' /></a>
+		<a href='https://www.fes.de/themenportal-flucht-migration-integration/' id='logo1' target='_blank'><img
+				src='FES_logo.png' alt='Friedrich Ebert Stiftung' title='Friedrich Ebert Stiftung' /></a>
 	</div>
 	<div id='nav' class='fade'></div>
 	<div id="chart"></div>
 	<div id='desc1' class='text fade'></div>
 	<div id='desc2' class='text fade'></div>
+	<div id='desc3' class='text fade'></div>
 	<div id='social' class='text fade credit'>
 		<a href="#" id='fb' class='text'
 			onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;">
@@ -66,7 +67,8 @@
 	</div>
 	<div id='footer' class='text fade credit'>
 		<a href='https://www.bakamosocial.com/' target='_blank'>bakamo</a>
-		&nbsp;|&nbsp;<a href='https://www.fes.de/' target='_blank'>Friedrich Ebert Stiftung</a>
+		&nbsp;|&nbsp;<a href='https://www.fes.de/themenportal-flucht-migration-integration/' target='_blank'>Friedrich
+			Ebert Stiftung</a>
 		&nbsp;|&nbsp;&copy;&nbsp;2019
 	</div>
 	<div id='dc2' class='credit'>
@@ -357,13 +359,14 @@
 							visualMap: {
 								min: 0,
 								orient: 'horizontal',
-								left: '300px',
-								bottom: '20px',
+								left: '260px',
+								padding: [13,7,7,7],
+								bottom: '25px',
 								calculable: true,
 								itemWidth: 20,
 								itemHeight: 200,
 								borderWidth: 1,
-								text: ['← try filtering countries'], //↖
+								text: ['◄ try filtering countries'], //↖
 								textStyle: {
 									color: font_color,
 									fontSize: font_small
@@ -467,7 +470,20 @@
 								},
 								data: []
 							}
-							]
+							],
+							title: [{
+								text: '◄ drag handles',
+								id:'handle',
+								left: '575px',
+								bottom: '48px',
+								textAlign: 'center',
+								textVerticalAlign: 'middle',
+								textStyle: {
+									fontSize: 13,
+									fontWeight: 'normal',
+									color: font_color
+								}
+							}]
 						};
 
 						function update(new_country, new_category, new_dimension, is_country, is_dimension) {
@@ -511,7 +527,8 @@
 									seriesIndex: [0, show_dimension ? 0 : 1],
 									inRange: {
 										color: [light_color, category_color_key[selected_category]]
-									}
+									},
+									range: [0, getMax(data, selected_category)]
 								},
 								yAxis: {
 									data: names,
@@ -538,6 +555,7 @@
 									text: (selected_country == default_country) ? '' :
 										selected_country,
 									left: '815px',
+									id:'selected_country',
 									top: '248px',
 									textAlign: 'center',
 									textVerticalAlign: 'middle',
@@ -549,7 +567,8 @@
 								{
 									text: selected_category,
 									left: '430px',
-									top: '450px',
+									top: '438px',
+									id:'selected_category',
 									textAlign: 'center',
 									textVerticalAlign: 'middle',
 									textStyle: {
@@ -590,13 +609,19 @@
 										selected_country, '', '', '')
 								})
 
+							d3.select('#desc3')
+								.html(function (d) {
+									return '<a href="' + ((selected_country == default_country) ? '' : narrative_formatter(params[selected_country][1], selected_category,
+										selected_country, '', '', '')) + '" target="_blank" style="color:' + font_color + ';">Read full report ►</a>'
+								})
+
 							d3.select('#desc1')
 								.html(narrative_formatter(params[selected_category][0], selected_category,
 									selected_country, '', '', ''))
 
-							d3.select('#subtitle')
-								.html(narrative_formatter(params[selected_category][1], selected_category,
-									selected_country, '', '', ''))
+							// d3.select('#subtitle')
+							// 	.html(narrative_formatter(params[selected_category][1], selected_category,
+							// 		selected_country, '', '', ''))
 
 
 							setTimeout(() => {
@@ -701,6 +726,7 @@
 							.on('click', function (d) {
 								update(selected_country, d, selected_dimension, false, false)
 							})
+
 
 						d3.selectAll('#subtitle')
 							.html(params['subtitle'][0])

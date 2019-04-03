@@ -141,6 +141,18 @@ a {
 	z-index:12;
 }
 
+#desc3 {
+	position: absolute;
+	top: 528px;
+	right: 25px;
+	width: 260px;
+	/* height: 100px; */
+	font-size: 0.9em;
+	font-weight: bold;
+	text-align: right;
+	z-index:12;
+}
+
 #nav {
 	position: fixed;
 	top: 90px;
