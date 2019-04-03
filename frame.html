@@ -274,6 +274,7 @@
 					var color_eu_gold = '#FFCC00';
 					var dark_color = '#222';
 					var light_color = '#eee';
+					var light_color2 = '#eee';
 					var highlight_color = '#999' //'#fc8d62';
 					var colors = params['colors']
 					var categorical = params['categorical'];
@@ -360,7 +361,7 @@
 								min: 0,
 								orient: 'horizontal',
 								left: '260px',
-								padding: [13, 7, 7, 7],
+								padding: [13, 17, 7, 7],
 								bottom: '25px',
 								calculable: true,
 								itemWidth: 20,
@@ -441,6 +442,7 @@
 									position: 'right',
 									fontWeight: 'bold',
 									color: font_color,
+									formatter: '{c} %',
 									emphasis: {
 										color: highlight_color,
 										fontSize: font_small
@@ -492,7 +494,7 @@
 							title: [{
 								text: '◄ drag the handle',
 								id: 'handle',
-								left: '530px',
+								left: '553px',
 								bottom: '48px',
 								textAlign: 'left',
 								textVerticalAlign: 'middle',
@@ -510,6 +512,7 @@
 								series: 'bar',
 								name: selected_country
 							})
+							
 							if ((new_country == selected_country) && (is_country))
 								selected_country = default_country
 							else selected_country = new_country;
@@ -544,9 +547,12 @@
 									dimension: 0,
 									seriesIndex: [0, show_dimension ? 0 : 1],
 									inRange: {
-										color: [light_color, category_color_key[selected_category]]
+										color: [light_color2, category_color_key[selected_category]]
 									},
-									range: [0, getMax(data, selected_category)]
+									range: [0, getMax(data, selected_category)],
+									formatter: function (value) {
+										return parseInt(value) + ' %';
+									}
 								},
 								yAxis: {
 									data: names,
