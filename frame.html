@@ -631,8 +631,7 @@
 
 							d3.select('#desc3')
 								.html(function (d) {
-									return '<a href="' + ((selected_country == default_country) ? '' : narrative_formatter(params[selected_country][1], selected_category,
-										selected_country, '', '', '')) + '" target="_blank" style="color:' + font_color + ';">Read full report ►</a>'
+									return (selected_country == default_country) ? '':'<a href="'+params[selected_country][1]+ '" target="_blank" style="color:' + font_color + ';">Read full report ►</a>'
 								})
 
 							d3.select('#desc1')
