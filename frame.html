@@ -360,7 +360,7 @@
 								min: 0,
 								orient: 'horizontal',
 								left: '260px',
-								padding: [13,7,7,7],
+								padding: [13, 7, 7, 7],
 								bottom: '25px',
 								calculable: true,
 								itemWidth: 20,
@@ -375,7 +375,25 @@
 								// 	color: colors
 								// }
 							},
-
+							graphic: [{
+								type: 'image',
+								style: {
+									image: 'FES_logo_tp2.png',
+									x: 280,
+									y: 10,
+									width: 200
+								}
+							},
+							{
+								type: 'image',
+								style: {
+									image: 'Bakamo_logo_tp2.png',
+									x: 560,
+									y: 370,
+									width: 200
+								}
+							}
+							],
 							yAxis: {
 								type: 'category',
 								triggerEvent: true,
@@ -473,7 +491,7 @@
 							],
 							title: [{
 								text: '◄ drag the handle',
-								id:'handle',
+								id: 'handle',
 								left: '530px',
 								bottom: '48px',
 								textAlign: 'left',
@@ -555,7 +573,7 @@
 									text: (selected_country == default_country) ? '' :
 										selected_country,
 									left: '815px',
-									id:'selected_country',
+									id: 'selected_country',
 									top: '248px',
 									textAlign: 'center',
 									textVerticalAlign: 'middle',
@@ -568,7 +586,7 @@
 									text: selected_category,
 									left: '430px',
 									top: '443px',
-									id:'selected_category',
+									id: 'selected_category',
 									textAlign: 'center',
 									textVerticalAlign: 'middle',
 									textStyle: {
@@ -622,7 +640,6 @@
 							// d3.select('#subtitle')
 							// 	.html(narrative_formatter(params[selected_category][1], selected_category,
 							// 		selected_country, '', '', ''))
-
 
 							setTimeout(() => {
 								d3.select('#dl')
